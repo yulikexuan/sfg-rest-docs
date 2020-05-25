@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.UnaryOperator;
+import java.util.function.Supplier;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,7 +33,11 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,6 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class BeerControllerIT {
 
     static final String REQUEST_MAPPING = "/api/v1/beer";
+    static final String PATH_PARAM_BEER_ID = "beerId";
 
     private String uuid;
     private String name;
@@ -75,8 +80,8 @@ class BeerControllerIT {
     @MockBean
     private IBeerRepository beerRepository;
 
-    private UnaryOperator<String> uriFunc = uuid ->
-            String.format("%s/%s", REQUEST_MAPPING, uuid);
+    private Supplier<String> uriSupplier = () ->
+            String.format("%s/{%s}", REQUEST_MAPPING, PATH_PARAM_BEER_ID);
 
     private BeerDto dto;
 
@@ -101,9 +106,12 @@ class BeerControllerIT {
                 .willReturn(Optional.of(Beer.builder().build()));
 
         // When & Then
-        this.mockMvc.perform(get(uriFunc.apply(this.uuid))
+        this.mockMvc.perform(get(uriSupplier.get(), this.uuid)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andDo(document("v1/beer", pathParameters(
+                        parameterWithName(PATH_PARAM_BEER_ID)
+                                .description("UUID of desired beer to get."))));
     }
 
     @Test
@@ -137,8 +145,8 @@ class BeerControllerIT {
         String beerDtoJson = this.objectMapper.writeValueAsString(this.dto);
 
         // When
-        this.mockMvc
-                .perform(put(uriFunc.apply(this.uuid))
+        this.mockMvc.perform(
+                put(uriSupplier.get(), this.uuid)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(beerDtoJson))
                 .andExpect(status().isNoContent());
@@ -159,7 +167,7 @@ class BeerControllerIT {
         String beerDtoJson = this.objectMapper.writeValueAsString(beerDto);
 
         // When
-        this.mockMvc.perform(put(uriFunc.apply(this.uuid))
+        this.mockMvc.perform(put(uriSupplier.get(), this.uuid)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(beerDtoJson))
                 .andExpect(status().isBadRequest())
