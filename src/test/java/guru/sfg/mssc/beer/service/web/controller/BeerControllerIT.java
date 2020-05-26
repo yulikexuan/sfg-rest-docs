@@ -36,6 +36,8 @@ import static org.mockito.Mockito.times;
 //import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -113,7 +115,17 @@ class BeerControllerIT {
                         pathParameters(parameterWithName(PATH_PARAM_BEER_ID)
                                 .description("UUID of desired beer to get.")),
                         requestParameters(parameterWithName("isCold")
-                                .description("Is beer colde query parameter"))));
+                                .description("Is beer colde query parameter")),
+                        responseFields(
+                                fieldWithPath("id").description("Id of Beer"),
+                                fieldWithPath("version").description("Version number"),
+                                fieldWithPath("createdDate").description("Creating time"),
+                                fieldWithPath("lastModifiedDate").description("Recent modified time"),
+                                fieldWithPath("beerName").description("The name of beer"),
+                                fieldWithPath("beerStyle").description("The style of beer"),
+                                fieldWithPath("upc").description("UPC of Beer"),
+                                fieldWithPath("price").description("The price of beer"),
+                                fieldWithPath("quantityOnHand").description("Quantity on Hand"))));
     }
 
     @Test
