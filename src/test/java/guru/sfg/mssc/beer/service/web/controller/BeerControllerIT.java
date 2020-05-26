@@ -36,8 +36,7 @@ import static org.mockito.Mockito.times;
 //import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -136,11 +135,20 @@ class BeerControllerIT {
         String beerDtoJson = this.objectMapper.writeValueAsString(this.dto);
 
         // When
-        this.mockMvc.perform(
-                post(REQUEST_MAPPING)
+        this.mockMvc.perform(post(REQUEST_MAPPING)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(beerDtoJson))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andDo(document("v1/beer", requestFields(
+                        fieldWithPath("id").ignored(),
+                        fieldWithPath("version").ignored(),
+                        fieldWithPath("createdDate").ignored(),
+                        fieldWithPath("lastModifiedDate").ignored(),
+                        fieldWithPath("beerName").description("The name of beer"),
+                        fieldWithPath("beerStyle").description("The style of beer"),
+                        fieldWithPath("upc").description("Beer UPC"),
+                        fieldWithPath("price").description("The price of beer"),
+                        fieldWithPath("quantityOnHand").ignored())));
 
         // Then
         then(this.beerRepository).should(times(1))
