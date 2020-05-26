@@ -36,8 +36,7 @@ import static org.mockito.Mockito.times;
 //import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -107,11 +106,14 @@ class BeerControllerIT {
 
         // When & Then
         this.mockMvc.perform(get(uriSupplier.get(), this.uuid)
+                .param("isCold", "true")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(document("v1/beer", pathParameters(
-                        parameterWithName(PATH_PARAM_BEER_ID)
-                                .description("UUID of desired beer to get."))));
+                .andDo(document("v1/beer",
+                        pathParameters(parameterWithName(PATH_PARAM_BEER_ID)
+                                .description("UUID of desired beer to get.")),
+                        requestParameters(parameterWithName("isCold")
+                                .description("Is beer colde query parameter"))));
     }
 
     @Test
