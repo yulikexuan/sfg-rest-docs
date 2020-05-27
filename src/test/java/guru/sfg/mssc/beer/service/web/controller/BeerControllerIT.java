@@ -48,7 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "cloudlab2020.yulikexuan.com", uriPort = 8081)
 @WebMvcTest(BeerController.class)
 @ComponentScan(basePackages = "guru.sfg.mssc.beer.service.web.mapper")
 @ExtendWith(RestDocumentationExtension.class)
