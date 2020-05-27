@@ -11,19 +11,18 @@ documentation snippets.
 
 One showing how to make a request using cURL:
 
-include::{snippets}/orders/curl-request.adoc[]
+include::{snippets}/v1/beer/curl-request.adoc[]
 
 One showing the HTTP request:
 
-include::{snippets}/orders/http-request.adoc[]
+include::{snippets}/v1/beer/http-request.adoc[]
 
 And one showing the HTTP response:
 
-include::{snippets}/orders/http-response.adoc[]
+include::{snippets}/v1/beer/http-response.adoc[]
 
 Response Body:
-include::{snippets}/orders/response-body.adoc[]
-
+include::{snippets}/v1/beer/response-body.adoc[]
 
 Response Fields:
-include::{snippets}/orders/response-fields.adoc[]
+include::{snippets}/v1/beer/response-fields.adoc[]
