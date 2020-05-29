@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -122,15 +123,15 @@ class BeerControllerIT {
                         requestParameters(parameterWithName("isCold")
                                 .description("Is beer colde query parameter")),
                         responseFields(
-                                fieldWithPath("id").description("Id of Beer"),
-                                fieldWithPath("version").description("Version number"),
-                                fieldWithPath("createdDate").description("Creating time"),
-                                fieldWithPath("lastModifiedDate").description("Recent modified time"),
-                                fieldWithPath("beerName").description("The name of beer"),
-                                fieldWithPath("beerStyle").description("The style of beer"),
-                                fieldWithPath("upc").description("UPC of Beer"),
-                                fieldWithPath("price").description("The price of beer"),
-                                fieldWithPath("quantityOnHand").description("Quantity on Hand"))));
+                                fieldWithPath("id").description("Id of Beer").type(UUID.class),
+                                fieldWithPath("version").description("Version number").type(Integer.class),
+                                fieldWithPath("createdDate").description("Creating time").type(OffsetDateTime.class),
+                                fieldWithPath("lastModifiedDate").description("Recent modified time").type(OffsetDateTime.class),
+                                fieldWithPath("beerName").description("The name of beer").type(String.class),
+                                fieldWithPath("beerStyle").description("The style of beer").type(BeerStyleEnum.class),
+                                fieldWithPath("upc").description("UPC of Beer").type(String.class),
+                                fieldWithPath("price").description("The price of beer").type(BigDecimal.class),
+                                fieldWithPath("quantityOnHand").description("Quantity on Hand").type(Integer.class))));
     }
 
     @Test
