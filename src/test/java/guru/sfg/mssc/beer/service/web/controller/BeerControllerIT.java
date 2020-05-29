@@ -116,7 +116,7 @@ class BeerControllerIT {
                 .param("isCold", "true")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(document("v1/beer",
+                .andDo(document("v1/beer-get",
                         pathParameters(parameterWithName(PATH_PARAM_BEER_ID)
                                 .description("UUID of desired beer to get.")),
                         requestParameters(parameterWithName("isCold")
@@ -147,7 +147,7 @@ class BeerControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(beerDtoJson))
                 .andExpect(status().isCreated())
-                .andDo(document("v1/beer", requestFields(
+                .andDo(document("v1/beer-new", requestFields(
                         constraintFields.withPath("id").ignored(),
                         constraintFields.withPath("version").ignored(),
                         constraintFields.withPath("createdDate").ignored(),
